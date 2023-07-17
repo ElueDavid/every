@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        .stat {
+            width: 200px;
+        }
+
+        svg {
+            display: block;
+            transform-origin: center center;
+            transform: rotate( 90deg );
+        }
+
+        path {
+            stroke-linecap: round;
+            stroke-width: 6px ;
+            fill:none;
+        }
+    </style>
+</head>
+<body>
+    
+    <section class="stat" id="sectionId">
+        <svg viewbox="0 0 100 100">
+          <path class="bar" d="
+          M 10, 50
+          a 40,40 0 1,0 80,0
+          a 40,40 0 1,0 -80,0
+         "/>
+          <path class="progress" d="
+            M 10, 50
+          a 40,40 0 1,0 80,0
+          a 40,40 0 1,0 -80,0
+          "/>
+        </svg>
+      
+        <script type="text/javascript">
+          _.makeProgressBar("01", 240, 40, 86);
+          _ = {};
+
+//this is a self executing function, it keeps the global namespace clean
+(function(win, doc, helper){
+
+  helper.makeProgressBar = function(id, totalDegrees, radius, percentage) {
+    var section = doc.getElementById(id);
+    var svg = section.children[0];
+    var bar = svg.children[0];
+    var progress = svg.children[1];
+
+    if(percentage > 100){
+        percentage = 100;
+    }
+    if(percentage < 0){
+        percentage = 0;
+    }
+
+    var percentageDegrees = calculateDegreesFromPercentage(totalDegrees, percentage);
+
+    var barDash = calculateDash(totalDegrees, radius);
+    var barGap = calculateDash ( 360 - totalDegrees, radius) * 2;
+
+    var progressDash = calculateDash(percentageDegrees, radius);
+    var progressGap = calculateDash(360 - percentageDegrees, radius) * 2;
+
+    var rotation = 0 - ((totalDegrees - percentageDegrees) / 2);
+
+    bar.setAttribute("style", "stroke: #707070; fill: none; stroke-dasharray: " + barDash + " " + barGap + ";");
+    progress.setAttribute("style", "stroke: #23CE39; fill: none; stroke-dasharray: " + progressDash + " " + progressGap + "; transform-origin: center center; transform: rotate("+ rotation +"deg)");
+  }
+
+  calculateDegreesFromPercentage = function(totalDegrees, percentage) {
+    return totalDegrees/100*percentage;
+  }
+
+  calculateDash = function(degrees, radius) {
+    return degrees * Math.PI / 180 * 0.5 * radius;
+  }
+})(window, document, _);
+        </script>
+      </section>
+</body>
+</html>

@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        #container {
+            width: 200px;
+            height: 100px;
+            }
+
+        svg {
+        height: 120px;
+        width: 200px;
+        fill: none;
+        stroke: red;
+        stroke-width: 10;
+        stroke-linecap: round; 
+        }
+    </style>
+</head>
+<body>
+    <script src="https://rawgit.com/kimmobrunfeldt/progressbar.js/1.0.0/dist/progressbar.js"></script>
+<link href="https://fonts.googleapis.com/css?family=Raleway:400,300,600,800,900" rel="stylesheet" type="text/css">
+<div id="container"></div>
+<script>
+    var bar = new ProgressBar.SemiCircle(container, {
+    strokeWidth: 10,
+    color: 'red',
+    trailColor: '#eee',
+    trailWidth: 10,
+    easing: 'easeInOut',
+    duration: 1400,
+    svgStyle: null,
+    text: {
+        value: '',
+        alignToBottom: false
+    },
+    
+    // Set default step function for all animate calls
+    step: (state, bar) => {
+        bar.path.setAttribute('stroke', state.color);
+        var value = Math.round(bar.value() * 30);
+        if (value === 0) {
+        bar.setText('');
+        } else {
+        bar.setText(value+" days left");
+        }
+
+        bar.text.style.color = state.color;
+    }
+    });
+    bar.text.style.fontFamily = 'sans-serif';
+    bar.text.style.fontSize = '1rem';
+
+    bar.animate(0.45);  // Number from 0.0 to 1.0
+</script>
+</body>
+</html>
